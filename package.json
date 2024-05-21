@@ -1,0 +1,23 @@
+{
+  "name": "laveguitaclick",
+  "version": "1.0.0",
+  "description": "Application to manage La VeguitaClick",
+  "scripts": {
+    "dev": "concurrently --kill-others-on-fail \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd Backend && npm run start:dev",
+    "dev:frontend": "cd Frontend && npm run start",
+    "build": "concurrently --kill-others-on-fail \"npm run build:backend\" \"npm run build:frontend\"",
+    "build:backend": "cd Backend && npm run build",
+    "build:frontend": "cd Frontend && npm run build",
+    "prod": "concurrently --kill-others-on-fail \"npm run start:prod:backend\" \"npm run start:prod:frontend\"",
+    "start:prod:backend": "cd Backend && npm run start:prod",
+    "start:prod:frontend": "cd Frontend && npm run serve:ssr:frontend",
+    "i": "npm install && npm install --prefix ./Backend && npm install --prefix ./Frontend"
+  },
+  "keywords": [],
+  "author": "Orel Naranjo",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
