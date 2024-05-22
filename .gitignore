@@ -4,6 +4,7 @@
 /frontend/dist
 /out-tsc
 /bazel-out
+backend/coverage/
 
 # Node
 /node_modules

@@ -1,12 +1,32 @@
 import { Module } from '@nestjs/common'
-import { AppController } from './app.controller'
-import { AppService } from './app.service'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { DatabaseService } from './services/database/database.service';
+import * as dotenv from 'dotenv';
+
+// Load environment variables file
+dotenv.config({ path: '../.env' });
+
+// Import Modules
+import { PrivilegeModule } from './modules/privilege.module';
+import { RoleModule } from './modules/role.module';
+import { AuditAuthModule } from './modules/audit-auth.module';
+import { AuthModule } from './modules/auth.module';
+import { AccountModule } from './modules/account.module';
+import { UserModule } from './modules/user.module';
+import { StatusModule } from './modules/status.module';
 
 @Module({
-  imports: [TypeOrmModule.forRootAsync({ useClass: DatabaseService })],
-  controllers: [AppController],
-  providers: [AppService, DatabaseService],
+  imports: [
+    TypeOrmModule.forRootAsync({ useClass: DatabaseService }),
+    AuthModule,
+    AccountModule,
+    UserModule,
+    RoleModule,
+    AuditAuthModule,
+    PrivilegeModule,
+    StatusModule,
+  ],
+  controllers: [],
+  providers: [DatabaseService],
 })
 export class AppModule { }
