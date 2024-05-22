@@ -17,6 +17,7 @@ import { StatusModule } from './modules/status.module';
 import { ImageModule } from './modules/image.module';
 import { ProductModule } from './modules/product.module';
 import { CategoryModule } from './modules/category.module';
+import { EmployeeModule } from './modules/employee.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { CategoryModule } from './modules/category.module';
     ImageModule,
     ProductModule,
     CategoryModule,
+    EmployeeModule,
   ],
   controllers: [],
   providers: [DatabaseService],

@@ -81,7 +81,8 @@
     "collectCoverageFrom": [
       "src/**/*.(t|j)s",
       "test/**/*.e2e-spec.ts",
-      "!src/main.ts"
+      "!src/main.ts",
+      "!src/entities/*.*"
     ],
     "coveragePathIgnorePatterns": [],
     "coverageDirectory": "coverage",

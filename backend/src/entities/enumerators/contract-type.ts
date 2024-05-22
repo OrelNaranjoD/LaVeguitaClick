@@ -1,0 +1,7 @@
+export enum ContractType {
+    INDEFINITE = 'INDEFINITE',
+    DEFINITE = 'DEFINITE',
+    TEMPORARY = 'TEMPORARY',
+    HONORARY = 'HONORARY',
+    OTHER = 'OTHER'
+}
