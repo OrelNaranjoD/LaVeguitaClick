@@ -26,7 +26,7 @@ export class EmployeeDetail {
     contract_type: ContractType;
 
     @Column()
-    cotract_number: number;
+    contract_number: number;
 
     @CreateDateColumn()
     created_at: Date;

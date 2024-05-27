@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { EmployeeDetail } from "./employee-detail.entity";
 import { IsRut } from "../validators/rut/rut.validator";
+import { Address } from "./address.entity";
 
 @Entity()
 export class Employee {
@@ -23,15 +24,6 @@ export class Employee {
     @Column()
     phone: string;
 
-    @Column()
-    address: string;
-
-    @Column()
-    city: string;
-
-    @Column()
-    state: string;
-
     @Column({ type: 'date'})
     birth_date: Date;
 
@@ -49,6 +41,9 @@ export class Employee {
 
     @OneToMany(() => EmployeeDetail, employeeDetail => employeeDetail.employee, { nullable: true })
     employeeDetails: EmployeeDetail[];
+
+    @OneToMany(() => Address, _ => { })
+    address: Address[];
 
     @Column({ default: false })
     is_deleted: boolean;

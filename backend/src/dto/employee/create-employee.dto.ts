@@ -1,9 +1,12 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { Employee } from '../../entities/employee.entity';
+import { IsRut } from '../../validators/rut/rut.validator';
+import { CreateAddressDto } from '../address/create-address.dto';
+import { CreateEmployeeDetailDto } from './create-employee-detail.dto';
 
 export class CreateEmployeeDto {
     @IsNotEmpty()
-    @IsString()
+    @IsRut()
     run: string;
 
     @IsNotEmpty()
@@ -23,18 +26,6 @@ export class CreateEmployeeDto {
     phone: string;
 
     @IsNotEmpty()
-    @IsString()
-    address: string;
-
-    @IsNotEmpty()
-    @IsString()
-    city: string;
-
-    @IsNotEmpty()
-    @IsString()
-    state: string;
-
-    @IsNotEmpty()
     birth_date: Date;
 
     @IsOptional()
@@ -45,4 +36,12 @@ export class CreateEmployeeDto {
 
     @IsOptional()
     is_deleted: boolean;
+
+    @IsOptional()
+    @IsArray()
+    employeeDetails: CreateEmployeeDetailDto[];
+
+    @IsOptional()
+    @IsArray()
+    address: CreateAddressDto[];
 }
