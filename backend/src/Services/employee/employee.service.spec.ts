@@ -9,6 +9,7 @@ import { CreateEmployeeDetailDto } from '../../dto/employee/create-employee-deta
 import { UpdateEmployeeDto } from '../../dto/employee/update-employee.dto';
 import { UpdateEmployeeDetailDto } from '../../dto/employee/update-employee-detail.dto';
 import { BadRequestException } from '@nestjs/common';
+import { ContractType } from '../../entities/enumerators/contract-type';
 
 describe('EmployeeService', () => {
   let service: EmployeeService;
@@ -33,66 +34,118 @@ describe('EmployeeService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should create an employee with a valid RUT', async () => {
-    const dto = new CreateEmployeeDto();
-    dto.run = '12.345.678-5';
-    const employee = new Employee();
-    jest.spyOn(employeeRepository, 'create').mockReturnValue(employee);
-    jest.spyOn(employeeRepository, 'save').mockResolvedValue(employee);
-    expect(await service.create(dto)).toBe(employee);
+  it('should create an employee', async () => {
+    const employee = {
+      id: 1,
+      run: '12345678-5',
+      first_name: 'First Name',
+      last_name: 'Last Name',
+      email: 'employee@example.com',
+      phone: '1234567890',
+      birth_date: new Date(),
+      is_active: true,
+      is_deleted: undefined,
+      manager: null,
+      employeeDetails: [],
+      address: []
+    };
+    jest.spyOn(employeeRepository, 'create').mockImplementation(() => employee as any);
+    jest.spyOn(employeeRepository, 'save').mockImplementation(() => Promise.resolve(employee as any));
+
+    expect(await service.create(employee)).toEqual(employee);
   });
 
-  it('should create an employee detail', async () => {
-    const dto = new CreateEmployeeDetailDto();
+  it('should create a full employee detail', async () => {
     const employee = new Employee();
+    employee.id = 1;
+    const dto = {
+      position: 'Position',
+      department: 'Department',
+      salary: 50000,
+      hire_date: new Date(),
+      fire_date: null,
+      contract_type: ContractType.INDEFINITE,
+      contract_number: 123456,
+      employee: employee,
+      is_deleted: false
+    };
+
     const employeeDetail = new EmployeeDetail();
+    Object.assign(employeeDetail, dto);
+
     jest.spyOn(employeeRepository, 'findOneBy').mockResolvedValue(employee);
     jest.spyOn(employeeDetailRepository, 'create').mockReturnValue(employeeDetail);
     jest.spyOn(employeeDetailRepository, 'save').mockResolvedValue(employeeDetail);
-    expect(await service.createDetail(1, dto)).toBe(employeeDetail);
+
+    const createdDetail = await service.createDetail(1, dto);
+    expect(createdDetail).toEqual(employeeDetail);
   });
 
   it('should find all employees', async () => {
-    const employees = [new Employee(), new Employee()];
-    jest.spyOn(employeeRepository, 'find').mockResolvedValue(employees);
-    expect(await service.findAll()).toBe(employees);
+    const employees = [{ id: 1, first_name: 'First Name', last_name: 'Last Name' }];
+    jest.spyOn(employeeRepository, 'find').mockImplementation(() => Promise.resolve(employees as any));
+
+    expect(await service.findAll()).toEqual(employees);
   });
 
-  it('should find one employee', async () => {
-    const employeeDetail = new EmployeeDetail();
-    const employee = new Employee();
-    employee.employeeDetails = [employeeDetail];
-    jest.spyOn(employeeRepository, 'findOne').mockResolvedValue(employee);
+  it('should find one employee with details', async () => {
+    const employeeDetail = {
+      id: 1,
+      position: 'Position',
+      phone: '1234567890',
+      email: 'detail@example.com'
+    };
+    const employee = {
+      id: 1,
+      run: '12345678-9',
+      first_name: 'First Name',
+      last_name: 'Last Name',
+      email: 'employee@example.com',
+      phone: '1234567890',
+      birth_date: new Date(),
+      is_active: true,
+      is_deleted: undefined,
+      manager: null,
+      employeeDetails: [employeeDetail],
+      address: []
+    };
+    jest.spyOn(employeeRepository, 'findOne').mockResolvedValue(employee as any);
+
     const foundEmployee = await service.findOne(1);
-    expect(foundEmployee).toBe(employee);
+    expect(foundEmployee).toEqual(employee);
     expect(foundEmployee.employeeDetails).toEqual([employeeDetail]);
   });
 
   it('should update an employee', async () => {
-    const dto = new UpdateEmployeeDto();
-    const updateResult = new UpdateResult();
-    jest.spyOn(employeeRepository, 'update').mockResolvedValue(updateResult);
-    expect(await service.update(1, dto)).toBe(updateResult);
+    const employee = { first_name: 'First Name Update', last_name: 'Last Name Update' };
+    jest.spyOn(employeeRepository, 'update').mockResolvedValue({ affected: 1 } as any);
+
+    expect(await service.update(1, employee)).toEqual({ affected: 1 });
   });
 
   it('should update an employee detail', async () => {
-    const dto = new UpdateEmployeeDetailDto();
-    const employeeDetail = new EmployeeDetail();
-    const updateResult = new UpdateResult();
-    jest.spyOn(employeeDetailRepository, 'findOne').mockResolvedValue(employeeDetail);
-    jest.spyOn(employeeDetailRepository, 'update').mockResolvedValue(updateResult);
-    expect(await service.updateDetail(1, dto)).toBe(updateResult);
+    const employeeDetail = { position: 'Position Update' };
+    const existingEmployeeDetail = new EmployeeDetail();
+    existingEmployeeDetail.id = 1;
+
+    jest.spyOn(employeeDetailRepository, 'findOne').mockResolvedValue(existingEmployeeDetail);
+    jest.spyOn(employeeDetailRepository, 'update').mockResolvedValue({ affected: 1 } as any);
+
+    expect(await service.updateDetail(1, employeeDetail)).toEqual({ affected: 1 });
   });
 
-  it('should remove an employee', async () => {
+  it('should remove an employee and its details', async () => {
     const employee = new Employee();
-    const employeeDetail = new EmployeeDetail();
-    employee.employeeDetails = [employeeDetail];
-    const updateResult = new UpdateResult();
+    employee.id = 1;
+    const detail = new EmployeeDetail();
+    detail.id = 1;
+    employee.employeeDetails = [detail];
+
     jest.spyOn(employeeRepository, 'findOne').mockResolvedValue(employee);
-    jest.spyOn(employeeDetailRepository, 'update').mockResolvedValue(updateResult);
-    jest.spyOn(employeeRepository, 'update').mockResolvedValue(updateResult);
-    expect(await service.remove(1)).toBe(updateResult);
+    jest.spyOn(employeeDetailRepository, 'update').mockResolvedValue({ affected: 1 } as any);
+    jest.spyOn(employeeRepository, 'update').mockResolvedValue({ affected: 1 } as any);
+
+    expect(await service.remove(1)).toEqual({ affected: 1 });
   });
 
   it('should throw an error when trying to create an employee with an invalid RUT', async () => {
