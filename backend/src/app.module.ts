@@ -18,6 +18,14 @@ import { ImageModule } from './modules/image.module';
 import { ProductModule } from './modules/product.module';
 import { CategoryModule } from './modules/category.module';
 import { EmployeeModule } from './modules/employee.module';
+import { SupplierModule } from './modules/supplier.module';
+import { CountryModule } from './modules/country.module';
+import { CommuneModule } from './modules/commune.module';
+import { SeederModule } from './modules/seeder.module';
+import { AddressModule } from './modules/address.module';
+import { ContactModule } from './modules/contact.module';
+import { CityModule } from './modules/city.module';
+import { RegionModule } from './modules/region.module';
 
 @Module({
   imports: [
@@ -33,6 +41,14 @@ import { EmployeeModule } from './modules/employee.module';
     ProductModule,
     CategoryModule,
     EmployeeModule,
+    SupplierModule,
+    AddressModule,
+    ContactModule,
+    SeederModule,
+    CountryModule,
+    CityModule,
+    RegionModule,
+    CommuneModule,
   ],
   controllers: [],
   providers: [DatabaseService],
