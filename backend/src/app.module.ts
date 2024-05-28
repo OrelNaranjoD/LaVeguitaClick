@@ -26,6 +26,8 @@ import { AddressModule } from './modules/address.module';
 import { ContactModule } from './modules/contact.module';
 import { CityModule } from './modules/city.module';
 import { RegionModule } from './modules/region.module';
+import { OrderModule } from './modules/order.module';
+import { CustomerModule } from './modules/customer.module';
 
 @Module({
   imports: [
@@ -49,6 +51,8 @@ import { RegionModule } from './modules/region.module';
     CityModule,
     RegionModule,
     CommuneModule,
+    OrderModule,
+    CustomerModule,
   ],
   controllers: [],
   providers: [DatabaseService],
