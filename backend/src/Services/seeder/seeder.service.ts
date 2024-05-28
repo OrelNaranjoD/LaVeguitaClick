@@ -5,10 +5,10 @@ import { Region } from '../../entities/region.entity';
 import { City } from '../../entities/city.entity';
 import { Commune } from '../../entities/commune.entity';
 import { Country } from '../../entities/country.entity';
-import { countries } from '../../entities/data/country.data';
-import { regions } from '../../entities/data/region.data';
-import { cities } from '../../entities/data/city.data';
-import { communes } from '../../entities/data/commune.data';
+import { cities } from '../../entities/data-seeder/city.data';
+import { communes } from '../../entities/data-seeder/commune.data';
+import { countries } from '../../entities/data-seeder/country.data';
+import { regions } from '../../entities/data-seeder/region.data';
 
 @Injectable()
 export class SeederService {
